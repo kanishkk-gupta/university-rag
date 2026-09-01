@@ -1,0 +1,227 @@
+[
+  {
+    "id": "q01",
+    "question": "What is the primary objective of the Anti Ragging Policy?",
+    "category": "Anti-ragging",
+    "expected_source": ["Anti Ragging Policy V 1.0"],
+    "expected_page": [],
+    "reference_answer": "To prohibit, prevent and eliminate the scourge of ragging in all its forms.",
+    "answerable": true
+  },
+  {
+    "id": "q02",
+    "question": "Who can I contact if I am a victim of ragging?",
+    "category": "Anti-ragging",
+    "expected_source": ["Anti Ragging Policy V 1.0"],
+    "expected_page": [],
+    "reference_answer": "The Anti-Ragging Committee or Anti-Ragging Squad.",
+    "answerable": true
+  },
+  {
+    "id": "q03",
+    "question": "What happens if a student violates the Code of Ethical & Professional Conduct?",
+    "category": "Code of conduct",
+    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy"],
+    "expected_page": [],
+    "reference_answer": "Disciplinary action may be taken, up to and including suspension or expulsion.",
+    "answerable": true
+  },
+  {
+    "id": "q04",
+    "question": "Does the DAC policy apply to faculty or just students?",
+    "category": "DAC questions",
+    "expected_source": ["DAC Policy- Version 02 (1)"],
+    "expected_page": [],
+    "reference_answer": "The DAC policy outlines rules primarily affecting student academics and discipline.",
+    "answerable": true
+  },
+  {
+    "id": "q05",
+    "question": "What is the DAC?",
+    "category": "DAC questions",
+    "expected_source": ["DAC Policy- Version 02 (1)"],
+    "expected_page": [],
+    "reference_answer": "Disciplinary Action Committee.",
+    "answerable": true
+  },
+  {
+    "id": "q06",
+    "question": "Are students allowed to consume drugs on campus?",
+    "category": "Drug abuse policy",
+    "expected_source": ["Drug Abuse Policy March 2024"],
+    "expected_page": [],
+    "reference_answer": "No, the university maintains a strict zero-tolerance policy towards drug abuse.",
+    "answerable": true
+  },
+  {
+    "id": "q07",
+    "question": "What is the deadline for Odd Semester fee payment for existing students?",
+    "category": "Fee questions",
+    "expected_source": ["Fee Payment Calendar-Academic Year-2026-27"],
+    "expected_page": [],
+    "reference_answer": "Refer to the specific date in the fee payment calendar table for odd semesters.",
+    "answerable": true
+  },
+  {
+    "id": "q08",
+    "question": "Are there late fee penalties?",
+    "category": "Fee questions",
+    "expected_source": ["Fee Payment Calendar-Academic Year-2026-27", "Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "Yes, late payments attract penalties.",
+    "answerable": true
+  },
+  {
+    "id": "q09",
+    "question": "Is Diwali a university holiday in 2026?",
+    "category": "Holiday questions",
+    "expected_source": ["Holiday List 2026 (1) (1)"],
+    "expected_page": [],
+    "reference_answer": "Yes, Diwali is typically listed as a holiday.",
+    "answerable": true
+  },
+  {
+    "id": "q10",
+    "question": "How many total holidays are there in 2026?",
+    "category": "Table-based questions",
+    "expected_source": ["Holiday List 2026 (1) (1)"],
+    "expected_page": [],
+    "reference_answer": "Check the tabulated list of holidays for the total count.",
+    "answerable": true
+  },
+  {
+    "id": "q11",
+    "question": "What is the attendance requirement for exams?",
+    "category": "Student handbook",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "Students typically require 75% minimum attendance.",
+    "answerable": true
+  },
+  {
+    "id": "q12",
+    "question": "What is the procedure for hostel room allocation?",
+    "category": "Student handbook",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "Hostel rooms are allocated based on availability and university procedure.",
+    "answerable": true
+  },
+  {
+    "id": "q13",
+    "question": "How are mid-term exams weighted in the final grade?",
+    "category": "Student handbook",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "The weightage is defined in the examination scheme section.",
+    "answerable": true
+  },
+  {
+    "id": "q14",
+    "question": "When does the even semester begin?",
+    "category": "Calendar questions",
+    "expected_source": ["University Calendar (Academic Year 2026-27) (2)"],
+    "expected_page": [],
+    "reference_answer": "Check the start dates in the university calendar for the even semester.",
+    "answerable": true
+  },
+  {
+    "id": "q15",
+    "question": "What are the dates for the end-semester examinations?",
+    "category": "Calendar questions",
+    "expected_source": ["University Calendar (Academic Year 2026-27) (2)"],
+    "expected_page": [],
+    "reference_answer": "The specific dates are tabulated in the academic calendar.",
+    "answerable": true
+  },
+  {
+    "id": "q16",
+    "question": "What are the rules regarding mobile phone usage in classrooms?",
+    "category": "Code of conduct",
+    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy", "Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "Mobile phones should typically be kept on silent or switched off.",
+    "answerable": true
+  },
+  {
+    "id": "q17",
+    "question": "What is the dress code for students?",
+    "category": "Code of conduct",
+    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy"],
+    "expected_page": [],
+    "reference_answer": "Students are expected to dress decently and professionally.",
+    "answerable": true
+  },
+  {
+    "id": "q18",
+    "question": "What is the punishment for cheating in an exam?",
+    "category": "DAC questions",
+    "expected_source": ["DAC Policy- Version 02 (1)", "Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "It is handled by the DAC and can lead to cancellation of exams or suspension.",
+    "answerable": true
+  },
+  {
+    "id": "q19",
+    "question": "Are pets allowed in the hostel?",
+    "category": "Student handbook",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "Generally, pets are not allowed in the hostel.",
+    "answerable": true
+  },
+  {
+    "id": "q20",
+    "question": "How do I apply for a transcript?",
+    "category": "Student handbook",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "expected_page": [],
+    "reference_answer": "Apply through the university portal or registry office.",
+    "answerable": true
+  },
+  {
+    "id": "q21",
+    "question": "What happens if I test positive for drugs?",
+    "category": "Drug abuse policy",
+    "expected_source": ["Drug Abuse Policy March 2024"],
+    "expected_page": [],
+    "reference_answer": "Strict disciplinary action, including possible expulsion.",
+    "answerable": true
+  },
+  {
+    "id": "q22",
+    "question": "Who is the President of the United States?",
+    "category": "Negative/out-of-scope",
+    "expected_source": [],
+    "expected_page": [],
+    "reference_answer": "I couldn't find enough information in the BMU knowledge base to answer that reliably.",
+    "answerable": false
+  },
+  {
+    "id": "q23",
+    "question": "What is the recipe for chocolate cake?",
+    "category": "Negative/out-of-scope",
+    "expected_source": [],
+    "expected_page": [],
+    "reference_answer": "I couldn't find enough information in the BMU knowledge base to answer that reliably.",
+    "answerable": false
+  },
+  {
+    "id": "q24",
+    "question": "What are the rules regarding parking on campus and the fees associated with it?",
+    "category": "Multi-document",
+    "expected_source": ["Student Handbook 2026-27_V3", "Fee Payment Calendar-Academic Year-2026-27"],
+    "expected_page": [],
+    "reference_answer": "Parking rules are in the handbook; fees (if any) are in the fee structure.",
+    "answerable": true
+  },
+  {
+    "id": "q25",
+    "question": "How are holidays and academic events scheduled together in 2026?",
+    "category": "Multi-document",
+    "expected_source": ["Holiday List 2026 (1) (1)", "University Calendar (Academic Year 2026-27) (2)"],
+    "expected_page": [],
+    "reference_answer": "Holidays are integrated into the academic calendar.",
+    "answerable": true
+  }
+]
