@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Persist ChromaDB data locally
+      - ./data/chroma:/app/data/chroma
+    environment:
+      # Connect to host's Ollama instance. For Mac/Windows use host.docker.internal
+      # For Linux, use host networking or the Docker bridge IP.
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
