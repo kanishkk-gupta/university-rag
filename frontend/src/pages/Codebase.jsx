@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-
-const API = '/api';
+import { codebaseQuery, codebaseStats } from '../services/api';
+import { Loader2 } from 'lucide-react';
 
 const Codebase = () => {
   const [query, setQuery] = useState('What is the complete flow from the React chat interface to Code Llama?');
@@ -20,9 +19,7 @@ const Codebase = () => {
   ];
 
   useEffect(() => {
-    axios.get(`${API}/codebase/stats`)
-      .then(r => setStats(r.data))
-      .catch(() => {});
+    codebaseStats().then(setStats).catch(() => {});
   }, []);
 
   const handleQuery = async (q) => {
@@ -32,8 +29,8 @@ const Codebase = () => {
     setResult(null);
     setSelectedChunk(null);
     try {
-      const res = await axios.post(`${API}/codebase/query`, { query: queryText, top_k: 5 });
-      setResult(res.data);
+      const res = await codebaseQuery(queryText, 5);
+      setResult(res);
     } catch (e) {
       setResult({ answer: `Error: ${e.message}`, sources: [], retrieved_chunks: [] });
     }
@@ -48,7 +45,7 @@ const Codebase = () => {
       <div style={{ marginBottom: '2rem' }}>
         <h1 style={{ marginBottom: '0.5rem' }}>Codebase Understanding</h1>
         <p style={{ color: 'var(--text-secondary)' }}>
-          Exercise 6: RAG applied to the application's own source code. The same pipeline used for BMU documents
+          Exercise 7: RAG applied to the application's own source code. The same pipeline used for BMU documents
           is applied to the repository itself, enabling multi-file reasoning about the codebase.
         </p>
       </div>
@@ -99,7 +96,10 @@ const Codebase = () => {
                 cursor: 'pointer',
                 textAlign: 'left',
                 maxWidth: '300px',
+                transition: 'border-color 0.15s',
               }}
+              onMouseEnter={e => e.currentTarget.style.borderColor = '#555'}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border-color)'}
             >
               {q}
             </button>
@@ -112,18 +112,18 @@ const Codebase = () => {
             onChange={e => setQuery(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleQuery()}
             placeholder="Ask a question about the repository..."
-            style={{ flex: 1, padding: '0.75rem', background: 'var(--bg-color)', border: '1px solid var(--border-color)', color: 'white', fontSize: '0.9rem' }}
+            className="input"
+            style={{ flex: 1 }}
           />
           <button className="btn" onClick={() => handleQuery()} disabled={loading}>
-            {loading ? 'Searching...' : 'Search Codebase'}
+            {loading ? <><Loader2 size={14} className="spin" /> Searching...</> : 'Search Codebase'}
           </button>
         </div>
       </div>
 
       {/* Results */}
       {result && (
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }} className="fade-in">
           {/* LEFT: LLM Answer */}
           <div>
             <h2 style={{ fontSize: '1.1rem', marginBottom: '1rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.5rem' }}>
@@ -151,6 +151,7 @@ const Codebase = () => {
                         cursor: 'pointer',
                         fontSize: '0.8rem',
                         fontFamily: 'monospace',
+                        transition: 'all 0.15s',
                       }}
                     >
                       <span style={{ color: langColor[s.file_path?.split('.').pop()] || '#888', marginRight: '0.5rem' }}>

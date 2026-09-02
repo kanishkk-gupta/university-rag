@@ -28,9 +28,11 @@ MODEL_CONFIGS = {
     "starcoder2:3b": {"display_name": "StarCoder2 3B", "description": "3B parameter base model from BigCode"},
     "qwen2.5-coder:1.5b": {"display_name": "Qwen 2.5 Coder 1.5B", "description": "Highly capable 1.5B coder from Qwen"}
 }
-LLM_MODEL = os.getenv("LLM_MODEL", "codellama:7b-instruct")
+# DEFAULT: qwen2.5-coder:1.5b — only ~1GB RAM, fast on CPU, no OOM risk
+# codellama:7b-instruct requires 4-6GB RAM and will OOM-kill on low-memory systems
+LLM_MODEL = os.getenv("LLM_MODEL", "qwen2.5-coder:1.5b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-LLM_TIMEOUT = int(os.getenv("LLM_TIMEOUT", "300"))
+LLM_TIMEOUT = int(os.getenv("LLM_TIMEOUT", "120"))  # 120s is enough for 1.5B model
 RAG_TOP_K = int(os.getenv("RAG_TOP_K", "5"))
 MAX_CONTEXT_CHARS = 10000           # Rough context limit before truncation
 

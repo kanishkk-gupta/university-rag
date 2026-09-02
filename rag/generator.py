@@ -70,6 +70,9 @@ class OllamaGenerator:
         except urllib.error.URLError as e:
             logger.error(f"Error communicating with Ollama: {e}")
             raise ConnectionError(f"Failed to generate response: {e}")
+        except TimeoutError as e:
+            logger.error(f"Timeout communicating with Ollama: {e}")
+            raise ConnectionError(f"Timeout while generating response: {e}")
         except json.JSONDecodeError as e:
             logger.error(f"Failed to decode Ollama response: {e}")
             raise ValueError(f"Invalid response from Ollama: {e}")

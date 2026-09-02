@@ -18,23 +18,25 @@ const Orchestration = () => {
       setTrace(prev => [...prev, { time: formatted, msg }]);
     };
     
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+    
     addTimeTrace("Request received by Frontend");
     addTimeTrace("Frontend → POST /api/chat");
     
     try {
-      setTimeout(() => addTimeTrace("API Service → RAG Service: Query received"), 100);
-      setTimeout(() => addTimeTrace("RAG Service → embed_query()"), 300);
-      setTimeout(() => addTimeTrace("Embedding Service → Vector (384-D)"), 1500);
-      setTimeout(() => addTimeTrace("RAG Service → ChromaDB: similarity search"), 1600);
-      setTimeout(() => addTimeTrace("ChromaDB → Top 3 chunks retrieved"), 1700);
-      setTimeout(() => addTimeTrace("RAG Service: Context construction complete"), 1800);
-      setTimeout(() => addTimeTrace("RAG Service → Ollama: POST /api/generate"), 1900);
-      setTimeout(() => addTimeTrace("Ollama (Code Llama): Generating tokens..."), 2000);
+      await sleep(100); addTimeTrace("API Service → RAG Service: Query received");
+      await sleep(200); addTimeTrace("RAG Service → embed_query()");
+      await sleep(1200); addTimeTrace("Embedding Service → Vector (384-D)");
+      await sleep(100); addTimeTrace("RAG Service → ChromaDB: similarity search");
+      await sleep(100); addTimeTrace("ChromaDB → Top 3 chunks retrieved");
+      await sleep(100); addTimeTrace("RAG Service: Context construction complete");
+      await sleep(100); addTimeTrace("RAG Service → Ollama: POST /api/generate");
+      await sleep(100); addTimeTrace("Ollama (Qwen2.5): Generating tokens...");
       
-      await chatWithRAG("What is the deadline for Odd Semester fee payment for existing students?", true);
+      const response = await chatWithRAG("What is the deadline for Odd Semester fee payment for existing students?", true);
       
       addTimeTrace("Ollama → RAG Service: Generation complete");
-      addTimeTrace("API Service → Frontend: 200 OK");
+      addTimeTrace(`API Service → Frontend: 200 OK (Answer: "${response.answer.substring(0, 40)}...")`);
     } catch (e) {
       addTimeTrace("Error: " + e.message);
     } finally {
@@ -47,7 +49,7 @@ const Orchestration = () => {
     { id: 'api', name: 'FastAPI Service', desc: 'Main entrypoint /api/chat. Handles CORS and validation.', icon: <Server /> },
     { id: 'rag', name: 'RAG Pipeline Service', desc: 'Orchestrates retrieval and context building.', icon: <Activity /> },
     { id: 'vector', name: 'ChromaDB', desc: 'Stores and searches 384-d chunk embeddings.', icon: <Database /> },
-    { id: 'llm', name: 'Ollama Engine', desc: 'Local host for Code Llama 7B.', icon: <BrainCircuit /> },
+    { id: 'llm', name: 'Ollama Engine', desc: 'Local host for Qwen2.5 1.5B.', icon: <BrainCircuit /> },
   ];
 
   return (

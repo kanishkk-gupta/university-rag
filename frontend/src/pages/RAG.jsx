@@ -137,6 +137,8 @@ const RAG = () => {
             <div style={{ fontFamily: 'monospace', fontSize: '0.75rem', background: '#000', padding: '1rem', borderRadius: '4px', wordBreak: 'break-all' }}>
               [{queryVector.slice(0, 8).map(v => v.toFixed(4)).join(', ')}, ... {queryVector.length - 8} more dimensions]
             </div>
+          ) : error ? (
+            <div style={{ color: '#ef4444', fontSize: '0.85rem' }}>Embedding failed — see error below.</div>
           ) : <Loader2 size={16} className="spin" />}
         </StepBox>
 
@@ -154,7 +156,7 @@ const RAG = () => {
               {retrievedChunks.map((chunk, i) => (
                 <div key={i} style={{ border: '1px solid var(--border-color)', padding: '0.75rem', fontSize: '0.8rem' }}>
                   <div style={{ fontWeight: 'bold', color: 'var(--text-primary)', marginBottom: '0.5rem' }}>
-                    Rank: #{i+1} | Distance: {chunk.distance.toFixed(4)}
+                    Rank: #{i+1} | Cosine Distance: {chunk.distance.toFixed(4)}
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.25rem', color: 'var(--text-secondary)' }}>
                     <div>Document: {chunk.document_name}</div>
@@ -164,6 +166,8 @@ const RAG = () => {
                 </div>
               ))}
             </div>
+          ) : error ? (
+            <div style={{ color: '#ef4444', fontSize: '0.85rem' }}>Retrieval failed — see error below.</div>
           ) : <Loader2 size={16} className="spin" />}
         </StepBox>
 
@@ -180,7 +184,7 @@ const RAG = () => {
 
         <StepBox 
           number="05" 
-          title="RELEVANT CONTEXT" 
+          title="CONTEXT AUGMENTATION" 
           active={pipelineState === 'generating'} 
           done={pipelineState === 'complete'}
         >

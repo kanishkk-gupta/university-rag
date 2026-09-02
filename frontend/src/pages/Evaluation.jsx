@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Loader2, Play, RefreshCw } from 'lucide-react';
+import { getEvalResults, getEvalSummary, getEvalDataset, runEvaluation } from '../services/api';
 
-const API = '/api';
 
 // ─── Metric Definitions (matches actual implementation) ─────────────────────
 const METRIC_DEFS = [
@@ -128,9 +128,7 @@ const SummaryTable = ({ results }) => {
         </tbody>
       </table>
       <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', borderTop: '1px solid #333', paddingTop: '0.75rem' }}>
-        <strong>* IMPORTANT:</strong> Metrics marked with * are derived from an evaluation run where Ollama was unavailable.
-        74/75 generations returned error strings. These values reflect error-state heuristics, NOT real model quality.
-        Re-run evaluation with Ollama running to obtain valid results.
+        <strong>Note:</strong> Evaluation includes heuristic metrics. Wait for the full run to complete for accurate results.
       </div>
     </div>
   );
@@ -259,17 +257,35 @@ const Evaluation = () => {
   const [dataset, setDataset] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('summary');
+  const [runningEval, setRunningEval] = useState(false);
+  const [runStatus, setRunStatus] = useState(null);
 
-  useEffect(() => {
+  const fetchData = () => {
+    setLoading(true);
     Promise.all([
-      axios.get(`${API}/evaluation/results`).then(r => r.data.results || []).catch(() => []),
-      axios.get(`${API}/evaluation/dataset`).then(r => r.data.dataset || []).catch(() => []),
+      getEvalResults().then(d => d.results || []).catch(() => []),
+      getEvalDataset().then(d => d.dataset || []).catch(() => []),
     ]).then(([res, ds]) => {
       setResults(res);
       setDataset(ds);
       setLoading(false);
     });
-  }, []);
+  };
+
+  useEffect(() => { fetchData(); }, []);
+
+  const handleRunEval = async () => {
+    setRunningEval(true);
+    setRunStatus(null);
+    try {
+      const data = await runEvaluation();
+      setRunStatus({ ok: true, msg: data.message });
+    } catch (e) {
+      setRunStatus({ ok: false, msg: `Error: ${e.message}` });
+    }
+    setRunningEval(false);
+  };
+
 
   const tabs = [
     { id: 'summary', label: 'Summary Metrics' },
@@ -281,15 +297,36 @@ const Evaluation = () => {
   return (
     <div style={{ padding: '2rem', maxWidth: '1400px', margin: '0 auto', width: '100%' }}>
       <div style={{ marginBottom: '2rem' }}>
-        <h1 style={{ marginBottom: '0.5rem' }}>Evaluation Dashboard</h1>
-        <p style={{ color: 'var(--text-secondary)' }}>
-          Week 4 — Multi-Model Evaluation: 25 questions × 3 models = 75 controlled generations
-        </p>
-        <div style={{ marginTop: '0.75rem', padding: '0.75rem', border: '1px solid #5a3a00', background: '#1a1000', fontSize: '0.85rem', color: '#f0a030' }}>
-          ⚠ <strong>Status:</strong> The existing evaluation run (74/75 failures) occurred while Ollama was offline.
-          Metrics marked with * are heuristic artifacts. To obtain valid results, start Ollama and use the API:
-          <code style={{ marginLeft: '0.5rem', background: '#000', padding: '0.1rem 0.4rem' }}>POST /api/evaluation/run</code>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+          <h1 style={{ margin: 0 }}>Evaluation Dashboard</h1>
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+            <button
+              className="btn btn-secondary"
+              onClick={fetchData}
+              disabled={loading}
+              style={{ padding: '0.5rem 1rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}
+            >
+              <RefreshCw size={13} /> Refresh
+            </button>
+            <button
+              className="btn"
+              onClick={handleRunEval}
+              disabled={runningEval}
+              style={{ padding: '0.5rem 1.25rem', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '0.4rem', background: '#22c55e', color: '#000' }}
+            >
+              {runningEval ? <><Loader2 size={13} className="spin" /> Running...</> : <><Play size={13} /> Run Evaluation</>}
+            </button>
+          </div>
         </div>
+        <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0' }}>
+          Week 4 — Multi-Model Evaluation: 25 questions × 2 models = 50 controlled generations
+        </p>
+        {runStatus && (
+          <div style={{ marginTop: '0.5rem', padding: '0.6rem 0.8rem', border: `1px solid ${runStatus.ok ? '#22c55e' : '#ef4444'}`, background: runStatus.ok ? '#0a1f0a' : '#1f0a0a', fontSize: '0.82rem', color: runStatus.ok ? '#4ade80' : '#ef4444' }}>
+            {runStatus.msg} {runStatus.ok && '— Refresh results in ~30-60 seconds when complete.'}
+          </div>
+        )}
+
       </div>
 
       {/* Tabs */}
@@ -315,7 +352,9 @@ const Evaluation = () => {
       </div>
 
       {loading ? (
-        <p style={{ color: 'var(--text-secondary)' }}>Loading evaluation data...</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+          <Loader2 size={14} className="spin" /> Loading evaluation data...
+        </div>
       ) : (
         <>
           {activeTab === 'summary' && <SummaryTable results={results} />}

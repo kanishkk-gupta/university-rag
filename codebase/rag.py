@@ -68,7 +68,7 @@ class CodebaseRAGPipeline:
             }
             
         # 3. Generate Answer
-        system_prompt = CODEBASE_SYSTEM_PROMPT.format(context=context_str)
+        system_prompt = CODEBASE_SYSTEM_PROMPT.replace("{context}", context_str)
         try:
             answer = self.generator.generate(system_prompt, user_query, model_name=model_name)
         except ConnectionError as e:

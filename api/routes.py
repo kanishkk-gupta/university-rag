@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, BackgroundTasks
 import logging
 
 from api.schemas import ChatRequest, ChatResponse, RetrieveRequest, RetrieveResponse, CodebaseRequest
@@ -149,6 +149,7 @@ def codebase_query(request: CodebaseRequest):
         result = cb_rag.query(request.query, top_k=request.top_k, model_name=request.model_name)
         return result
     except Exception as e:
+        logger.exception("Codebase query failed")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/api/codebase/stats")
@@ -168,13 +169,11 @@ def get_eval_dataset():
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/api/evaluation/run")
-def run_eval():
+def run_eval(background_tasks: BackgroundTasks):
     from evaluation.runner import run_evaluation
     try:
-        # In a real app this should be a background task (e.g. Celery/BackgroundTasks)
-        # But for this demo, we'll run it synchronously or just kick it off
-        # Let's import BackgroundTasks and use it
-        return {"message": "Evaluation started. Check logs for progress."}
+        background_tasks.add_task(run_evaluation)
+        return {"status": "started", "message": "Evaluation started in background. Refresh /api/evaluation/results to check progress."}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
