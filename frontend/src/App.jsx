@@ -8,6 +8,7 @@ import Orchestration from './pages/Orchestration';
 import Dockerized from './pages/Dockerized';
 import Evaluation from './pages/Evaluation';
 import Codebase from './pages/Codebase';
+import Guardrails from './pages/Guardrails';
 import './styles/index.css';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/dockerized" element={<Dockerized />} />
             <Route path="/evaluation" element={<Evaluation />} />
             <Route path="/codebase" element={<Codebase />} />
+            <Route path="/guardrails" element={<Guardrails />} />
           </Routes>
         </main>
       </div>

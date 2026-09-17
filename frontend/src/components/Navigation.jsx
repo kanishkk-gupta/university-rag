@@ -64,6 +64,8 @@ const Navigation = () => {
         <NavLink to="/evaluation" style={linkStyle}>6. EVALUATION</NavLink>
         <span style={{ color: 'var(--border-color)' }}>|</span>
         <NavLink to="/codebase" style={linkStyle}>7. CODEBASE</NavLink>
+        <span style={{ color: 'var(--border-color)' }}>|</span>
+        <NavLink to="/guardrails" style={linkStyle}>8. GUARDRAILS</NavLink>
       </div>
     </nav>
   );

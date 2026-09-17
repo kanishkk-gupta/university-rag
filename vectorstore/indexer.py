@@ -3,7 +3,7 @@ import logging
 from typing import List, Dict, Any
 from tqdm import tqdm
 
-from config import CHUNKS_OUTPUT_FILE, INDEXING_BATCH_SIZE, MAX_EMBEDDING_CHUNK_CHARS
+from config import CHUNKS_OUTPUT_FILE, INDEXING_BATCH_SIZE, MAX_EMBEDDING_CHUNK_CHARS, EMBEDDING_BATCH_SIZE
 from embeddings.embedder import generate_embeddings
 from vectorstore.chroma_store import ChromaStore
 
@@ -130,7 +130,7 @@ def run_indexing():
         # metadatas is everything except 'text'
         metadatas = [{k: v for k, v in c.items() if k != "text"} for c in batch]
         
-        embeddings = generate_embeddings(texts, batch_size=INDEXING_BATCH_SIZE)
+        embeddings = generate_embeddings(texts, batch_size=EMBEDDING_BATCH_SIZE)
         
         store.add_records(ids=ids, embeddings=embeddings, metadatas=metadatas, documents=texts)
         

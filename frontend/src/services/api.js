@@ -94,4 +94,20 @@ export const runEvaluation = async () => {
   return response.data;
 };
 
+export const getEvalCategorySummary = async () => {
+  const response = await api.get('/evaluation/category-summary');
+  return response.data;
+};
+
+// Guardrail API functions
+export const checkGuardrail = async (query) => {
+  const response = await api.post('/guardrails/check', { query });
+  return response.data;
+};
+
+export const runGuardrailTests = async () => {
+  const response = await api.get('/guardrails/test');
+  return response.data;
+};
+
 export default api;

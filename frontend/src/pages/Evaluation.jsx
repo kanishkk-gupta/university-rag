@@ -3,132 +3,102 @@ import { Loader2, Play, RefreshCw } from 'lucide-react';
 import { getEvalResults, getEvalSummary, getEvalDataset, runEvaluation } from '../services/api';
 
 
-// ─── Metric Definitions (matches actual implementation) ─────────────────────
+// ─── Metric Definitions (New LLM & Semantic Metrics) ─────────────────────
 const METRIC_DEFS = [
   {
-    name: 'Accuracy',
-    label: 'Heuristic Accuracy',
-    formula: 'For answerable questions: answer.length > 10 AND not a rejection string\nFor unanswerable: answer contains "couldn\'t find enough information"',
-    note: 'Heuristic — not objective accuracy. Error strings may pass the length check.'
+    name: 'LLM Judge Score',
+    label: 'LLM Judge Score (0.0 – 1.0)',
+    formula: 'A powerful judge LLM (e.g., Llama 3) evaluates the model answer against the reference answer based on Accuracy, Completeness, and Grounding.',
+    note: 'Score is normalized to a 0-1 scale. A score of 1.0 means perfect alignment with the reference.'
   },
   {
-    name: 'Relevance',
-    label: 'Heuristic Relevance (0–2)',
-    formula: '0 if rejection string in answer\n2 otherwise (always 2 for non-rejection)',
-    note: 'Binary heuristic only. Does not measure semantic relevance.'
-  },
-  {
-    name: 'Recall@5',
-    label: 'Recall@5',
-    formula: 'hits / len(expected_sources)\nwhere hits = expected source doc names found in top-5 retrieved chunk metadata',
-    note: 'Currently shows 0.0 for all records due to a metadata key path bug in the runner.'
-  },
-  {
-    name: 'Hallucination',
-    label: 'Hallucination Rate (CONSTANT)',
-    formula: '0.0 if rejection string\n0.1 otherwise (hardcoded constant)',
-    note: 'NOT a real measurement. Fixed at 0.1 for all non-rejection answers. Cannot differentiate models.'
+    name: 'Semantic Similarity',
+    label: 'Semantic Similarity (0.0 – 1.0)',
+    formula: 'Cosine similarity between the embeddings of the model answer and the reference answer using a sentence-transformers model (all-MiniLM-L6-v2).',
+    note: 'Captures meaning rather than exact word matching. Higher is better.'
   },
   {
     name: 'Latency',
     label: 'Generation Latency (seconds)',
-    formula: 'time.time() after generate() call — time.time() before generate() call\nIncludes Ollama connection check + network + inference',
-    note: 'Real wall-clock timer. Includes connection timeout when Ollama is unavailable.'
-  },
-  {
-    name: 'Tokens',
-    label: 'Token Usage',
-    formula: 'prompt_tokens = prompt_eval_count from Ollama response\ncompletion_tokens = eval_count from Ollama response\ntotal_tokens = sum',
-    note: 'Real from Ollama. Shows 0 when Ollama is unavailable (generation failed).'
-  },
-  {
-    name: 'CPU / RAM',
-    label: 'System Resources',
-    formula: 'CPU%: psutil.cpu_percent() — system-level, single snapshot BEFORE generation\nRAM: psutil.virtual_memory().used in MB — system total, not process',
-    note: 'Snapshot taken before generation starts. Does not capture peak load during inference.'
+    formula: 'time.time() after generate() call — time.time() before generate() call',
+    note: 'Real wall-clock timer. Includes network overhead and inference time.'
   }
 ];
 
 // ─── Summary Table ───────────────────────────────────────────────────────────
-const SummaryTable = ({ results }) => {
-  if (!results || results.length === 0) return <p style={{ color: 'var(--text-secondary)' }}>No results available.</p>;
-
-  const models = [...new Set(results.map(r => r.model))];
-  const stats = {};
-
-  for (const m of models) {
-    const recs = results.filter(r => r.model === m);
-    const successful = recs.filter(r => !r.answer.startsWith('Error:'));
-    const lats = recs.map(r => r.generation_latency);
-    const sorted = [...lats].sort((a, b) => a - b);
-    const retr = recs.map(r => r.retrieval_latency);
-    const pt = recs.map(r => r.tokens?.prompt_tokens || 0);
-    const ct = recs.map(r => r.tokens?.completion_tokens || 0);
-    const cpu = recs.map(r => r.resources?.cpu_percent || 0);
-    const ram = recs.map(r => r.resources?.ram_mb || 0);
-    const acc = recs.map(r => r.metrics?.accuracy || 0);
-    const hal = recs.map(r => r.metrics?.hallucination || 0);
-    const rec5 = recs.map(r => r.metrics?.recall_at_5 || 0);
-    const mean = arr => arr.length ? (arr.reduce((a, b) => a + b, 0) / arr.length) : 0;
-    const p95 = sorted[Math.floor(sorted.length * 0.95)] || 0;
-
-    stats[m] = {
-      total: recs.length,
-      successful: successful.length,
-      failed: recs.length - successful.length,
-      accuracy: mean(acc),
-      recall5: mean(rec5),
-      hallucination: mean(hal),
-      genLatMean: mean(lats),
-      genLatMedian: sorted[Math.floor(sorted.length / 2)] || 0,
-      genLatP95: p95,
-      retrLatMean: mean(retr),
-      promptTokens: mean(pt),
-      completionTokens: mean(ct),
-      cpuMean: mean(cpu),
-      ramMean: mean(ram),
-    };
+const SummaryTable = ({ categorySummary }) => {
+  if (!categorySummary || !categorySummary.overall) {
+    return <p style={{ color: 'var(--text-secondary)' }}>No category evaluation results available. Run the evaluation first.</p>;
   }
 
+  const models = Object.keys(categorySummary.overall);
+  const categories = Object.keys(categorySummary.categories || {});
+
   return (
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'right' }}>
-        <thead>
-          <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
-            {['Metric', ...models].map(h => (
-              <th key={h} style={{ padding: '0.6rem 0.8rem', textAlign: h === 'Metric' ? 'left' : 'right', color: 'var(--text-secondary)', fontWeight: 600 }}>{h.replace('codellama:7b-instruct','Code Llama 7B').replace('starcoder2:3b','StarCoder2 3B').replace('qwen2.5-coder:1.5b','Qwen2.5 1.5B')}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            ['Total Questions', m => stats[m].total],
-            ['Successful Generations', m => stats[m].successful],
-            ['Failed (Ollama down)', m => stats[m].failed],
-            ['Heuristic Accuracy *', m => (stats[m].accuracy * 100).toFixed(1) + '%'],
-            ['Recall@5 (buggy=0) *', m => stats[m].recall5.toFixed(3)],
-            ['Hallucination (fixed 0.1) *', m => stats[m].hallucination.toFixed(3)],
-            ['Gen Latency Mean', m => stats[m].genLatMean.toFixed(3) + 's'],
-            ['Gen Latency Median', m => stats[m].genLatMedian.toFixed(3) + 's'],
-            ['Gen Latency P95', m => stats[m].genLatP95.toFixed(3) + 's'],
-            ['Retrieval Latency Mean', m => stats[m].retrLatMean.toFixed(3) + 's'],
-            ['Prompt Tokens Mean', m => stats[m].promptTokens.toFixed(0)],
-            ['Completion Tokens Mean', m => stats[m].completionTokens.toFixed(0)],
-            ['CPU% Mean (pre-gen)', m => stats[m].cpuMean.toFixed(1) + '%'],
-            ['RAM MB Mean (pre-gen)', m => stats[m].ramMean.toFixed(0) + ' MB'],
-            ['GPU', () => 'unavailable'],
-          ].map(([label, fn]) => (
-            <tr key={label} style={{ borderBottom: '1px solid #222' }}>
-              <td style={{ padding: '0.5rem 0.8rem', textAlign: 'left', color: label.includes('*') ? '#888' : 'var(--text-primary)', fontStyle: label.includes('*') ? 'italic' : 'normal' }}>{label}</td>
-              {models.map(m => (
-                <td key={m} style={{ padding: '0.5rem 0.8rem', fontFamily: 'monospace' }}>{fn(m)}</td>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+      {/* Overall Score */}
+      <div>
+        <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Overall Performance</h2>
+        <div style={{ overflowX: 'auto', background: 'var(--panel-bg)', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem', textAlign: 'right' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border-color)', background: 'rgba(255,255,255,0.02)' }}>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: 600 }}>Metric</th>
+                {models.map(m => (
+                  <th key={m} style={{ padding: '0.8rem 1rem', color: 'var(--text-primary)', fontWeight: 600 }}>{m}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {['Judge Score', 'Semantic Similarity', 'Average Latency'].map(metric => (
+                <tr key={metric} style={{ borderBottom: '1px solid #222' }}>
+                  <td style={{ padding: '0.8rem 1rem', textAlign: 'left', fontWeight: 600, color: 'var(--text-secondary)' }}>{metric}</td>
+                  {models.map(m => {
+                    const stats = categorySummary.overall[m];
+                    let val = '';
+                    if (metric === 'Judge Score') val = (stats.judge_score || 0).toFixed(2);
+                    else if (metric === 'Semantic Similarity') val = (stats.semantic_similarity || 0).toFixed(2);
+                    else if (metric === 'Average Latency') val = (stats.avg_latency || 0).toFixed(2) + 's';
+                    return <td key={m} style={{ padding: '0.8rem 1rem', fontFamily: 'monospace' }}>{val}</td>;
+                  })}
+                </tr>
               ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <div style={{ marginTop: '1rem', fontSize: '0.8rem', color: '#666', borderTop: '1px solid #333', paddingTop: '0.75rem' }}>
-        <strong>Note:</strong> Evaluation includes heuristic metrics. Wait for the full run to complete for accurate results.
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Category Breakdown */}
+      <div>
+        <h2 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--text-primary)' }}>Category Breakdown (Judge Score)</h2>
+        <div style={{ overflowX: 'auto', background: 'var(--panel-bg)', border: '1px solid var(--border-color)', borderRadius: '8px' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem', textAlign: 'right' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid var(--border-color)', background: 'rgba(255,255,255,0.02)' }}>
+                <th style={{ padding: '0.8rem 1rem', textAlign: 'left', color: 'var(--text-secondary)', fontWeight: 600 }}>Category</th>
+                {models.map(m => (
+                  <th key={m} style={{ padding: '0.8rem 1rem', color: 'var(--text-primary)', fontWeight: 600 }}>{m}</th>
+                ))}
+                <th style={{ padding: '0.8rem 1rem', color: 'var(--accent-color)', fontWeight: 600 }}>Winner</th>
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map(cat => (
+                <tr key={cat} style={{ borderBottom: '1px solid #222' }}>
+                  <td style={{ padding: '0.8rem 1rem', textAlign: 'left', fontWeight: 600, color: 'var(--text-primary)' }}>{cat}</td>
+                  {models.map(m => (
+                    <td key={m} style={{ padding: '0.8rem 1rem', fontFamily: 'monospace' }}>
+                      {(categorySummary.categories[cat][m]?.judge_score || 0).toFixed(2)}
+                    </td>
+                  ))}
+                  <td style={{ padding: '0.8rem 1rem', fontWeight: 600, color: 'var(--accent-color)' }}>
+                    {categorySummary.winners?.[cat] || '—'}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
@@ -201,16 +171,12 @@ const QuestionComparison = ({ results, dataset }) => {
                         {rec.answer}
                       </div>
                       <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.25rem', fontFamily: 'monospace' }}>
-                        <div>Accuracy: {rec.metrics?.accuracy ?? '—'}</div>
-                        <div>Relevance: {rec.metrics?.relevance ?? '—'}</div>
-                        <div>Recall@5: {rec.metrics?.recall_at_5 ?? '—'}</div>
-                        <div>Hallucination: {rec.metrics?.hallucination ?? '—'}</div>
-                        <div>Gen Lat: {rec.generation_latency?.toFixed(3)}s</div>
-                        <div>Retr Lat: {rec.retrieval_latency?.toFixed(3)}s</div>
+                        <div style={{ color: '#22c55e', fontWeight: 600 }}>Judge Score: {rec.metrics?.judge_score?.toFixed(2) ?? '—'}</div>
+                        <div style={{ color: '#3b82f6', fontWeight: 600 }}>Semantic Sim: {rec.metrics?.semantic_similarity?.toFixed(2) ?? '—'}</div>
+                        <div>Gen Lat: {rec.generation_latency?.toFixed(2)}s</div>
+                        <div>Retr Lat: {rec.retrieval_latency?.toFixed(2)}s</div>
                         <div>Prompt Tok: {rec.tokens?.prompt_tokens ?? 'N/A'}</div>
                         <div>Compl Tok: {rec.tokens?.completion_tokens ?? 'N/A'}</div>
-                        <div>CPU: {rec.resources?.cpu_percent?.toFixed(1)}%</div>
-                        <div>RAM: {rec.resources?.ram_mb?.toFixed(0)} MB</div>
                       </div>
                       <div style={{ marginTop: '0.75rem', fontSize: '0.7rem', color: '#555' }}>
                         Mode: {rec.mode} | Same context → 3 models ✓
@@ -255,6 +221,7 @@ const MetricDefinitions = () => (
 const Evaluation = () => {
   const [results, setResults] = useState([]);
   const [dataset, setDataset] = useState([]);
+  const [categorySummary, setCategorySummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('summary');
   const [runningEval, setRunningEval] = useState(false);
@@ -262,13 +229,18 @@ const Evaluation = () => {
 
   const fetchData = () => {
     setLoading(true);
-    Promise.all([
-      getEvalResults().then(d => d.results || []).catch(() => []),
-      getEvalDataset().then(d => d.dataset || []).catch(() => []),
-    ]).then(([res, ds]) => {
-      setResults(res);
-      setDataset(ds);
-      setLoading(false);
+    // Dynamic import for getEvalCategorySummary from API service
+    import('../services/api').then(({ getEvalResults, getEvalDataset, getEvalCategorySummary }) => {
+      Promise.all([
+        getEvalResults().then(d => d.results || []).catch(() => []),
+        getEvalDataset().then(d => d.dataset || []).catch(() => []),
+        getEvalCategorySummary().catch(() => null)
+      ]).then(([res, ds, catSummary]) => {
+        setResults(res);
+        setDataset(ds);
+        setCategorySummary(catSummary);
+        setLoading(false);
+      });
     });
   };
 
@@ -319,7 +291,7 @@ const Evaluation = () => {
           </div>
         </div>
         <p style={{ color: 'var(--text-secondary)', margin: '0.5rem 0' }}>
-          Week 4 — Multi-Model Evaluation: 25 questions × 2 models = 50 controlled generations
+          Week 4 — Multi-Model Category Evaluation (Semantic & LLM-as-a-Judge)
         </p>
         {runStatus && (
           <div style={{ marginTop: '0.5rem', padding: '0.6rem 0.8rem', border: `1px solid ${runStatus.ok ? '#22c55e' : '#ef4444'}`, background: runStatus.ok ? '#0a1f0a' : '#1f0a0a', fontSize: '0.82rem', color: runStatus.ok ? '#4ade80' : '#ef4444' }}>
@@ -357,7 +329,7 @@ const Evaluation = () => {
         </div>
       ) : (
         <>
-          {activeTab === 'summary' && <SummaryTable results={results} />}
+          {activeTab === 'summary' && <SummaryTable categorySummary={categorySummary} />}
           {activeTab === 'comparison' && <QuestionComparison results={results} dataset={dataset} />}
           {activeTab === 'definitions' && <MetricDefinitions />}
           {activeTab === 'dataset' && (

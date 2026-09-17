@@ -1,0 +1,26 @@
+Is project me guardrails ka main kaam ye ensure karna hai ki RAG pipeline me jo input (user query) aa raha hai aur jo output (LLM ka answer) ja raha hai, dono safe, relevant aur hallucination-free hon.
+
+Poore guardrail logic ko 3 main files me divide kiya gaya hai:
+
+1. guardrail.py (The Orchestrator)
+Ye ek main class GuardrailPipeline define karta hai jo sabhi guards ko sequence me run karti hai. Iske do main methods hain:
+
+check_input(query): Ye RAG pipeline start hone se pehle chalya jata hai. Agar koi bhi input guard fail hota hai (jiska severity "block" ho), toh ye immediately request ko stop kar deta hai.
+check_output(answer, context): Ye LLM ke answer generate karne ke baad chalta hai. Ye block nahi karta balki "warnings" collect karta hai (jaise ki hallucination ka doubt) taaki UI me dikhaya ja sake.
+2. input_guards.py (Pre-Retrieval Checks)
+Jab user koi question poochta hai, toh use 4 guards se paas hona padta hai:
+
+InputLengthGuard: Check karta hai ki query limit se badi na ho (Max 500 characters). Ye "prompt injection" attacks ko rokta hai.
+ContentGuard: Regex/keywords use karke check karta hai ki query me koi abusive, offensive ya inappropriate language na ho.
+PIIGuard: (Personally Identifiable Information Guard) Ye check karta hai ki user ne koi personal data (jaise PAN number, phone number, ya email) toh nahi daal diya.
+ScopeGuard: Ye bahut important hai. Ye BMU (university) se related keywords (jaise "fee", "exam", "attendance", "hostel") check karta hai. Agar query completely out of scope hai (e.g., "What is the capital of France?"), toh ye use block kar dega ki ye University RAG system hai.
+
+3. output_guards.py (Post-Generation Checks)
+Jab LLM answer bana leta hai, tab ye 4 guards chalte hain:
+
+MinimumLengthGuard: Check karta hai ki answer bahut chhota (20 chars se kam) ya bahut bada (3000 chars se zyada) toh nahi hai.
+RefusalConsistencyGuard: Agar vector database se koi context nahi mila, toh LLM ko refuse karna chahiye ("couldn't find enough information"). Agar context nahi tha fir bhi LLM ne answer de diya, toh ye guard usko as a hallucination warning flag karta hai.
+ContextGroundingGuard: Ye sentence-transformers use karke LLM ke answer aur database ke context ke beech ka cosine similarity (semantic match) nikalta hai. Agar score 0.15 se kam hai, iska matlab LLM ne kuch aisi baat boli hai jo documents me thi hi nahi (fail to ground).
+
+SourceCitationGuard: Check karta hai ki LLM ne properly [SOURCE X] tag use karke apna source cite kiya hai ya nahi.
+

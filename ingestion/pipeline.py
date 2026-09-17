@@ -45,12 +45,6 @@ from ingestion.chunker import chunk_document, validate_chunks
 
 logger = logging.getLogger(__name__)
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s  %(levelname)-8s  %(name)s — %(message)s",
-    datefmt="%H:%M:%S",
-)
-
 
 # ─── JSONL I/O helpers ─────────────────────────────────────────────────────────
 
@@ -115,7 +109,7 @@ def process_document(record: DocumentRecord) -> dict:
         doc_report["errors"].append(msg)
         doc_report["status"] = "failed"
         doc_report["processing_time_s"] = round(time.time() - start_time, 2)
-        return doc_report
+        return doc_report, []
 
     doc_report["extraction_method"] = classification.doc_method.value
     doc_report["native_pages"] = classification.native_page_count
@@ -141,7 +135,7 @@ def process_document(record: DocumentRecord) -> dict:
                 doc_report["warnings"].append(msg)
                 doc_report["status"] = "ocr_skipped"
                 doc_report["processing_time_s"] = round(time.time() - start_time, 2)
-                return doc_report
+                return doc_report, []
 
             pages = extract_ocr_pdf(
                 document_id=record.document_id,
@@ -158,7 +152,7 @@ def process_document(record: DocumentRecord) -> dict:
         doc_report["errors"].append(msg)
         doc_report["status"] = "failed"
         doc_report["processing_time_s"] = round(time.time() - start_time, 2)
-        return doc_report
+        return doc_report, []
 
     # Collect warnings from individual pages
     for page in pages:
@@ -380,4 +374,10 @@ def run_pipeline(documents_dir: Path = DOCUMENTS_DIR) -> dict:
     logger.info("  OCR skipped: %d", len(ocr_skipped))
     logger.info("=" * 60)
 
-    return report
+if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s  %(levelname)-8s  %(name)s — %(message)s",
+        datefmt="%H:%M:%S",
+    )
+    run_pipeline()

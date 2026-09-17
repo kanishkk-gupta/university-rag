@@ -1,227 +1,317 @@
 [
   {
-    "id": "q01",
+    "id": "exp01",
     "question": "What is the primary objective of the Anti Ragging Policy?",
-    "category": "Anti-ragging",
+    "category": "Explanation",
     "expected_source": ["Anti Ragging Policy V 1.0"],
-    "expected_page": [],
-    "reference_answer": "To prohibit, prevent and eliminate the scourge of ragging in all its forms.",
-    "answerable": true
+    "reference_answer": "To prohibit, prevent and eliminate the scourge of ragging in all its forms within the university campus.",
+    "answerable": true,
+    "judge_rubric": "The answer should clearly explain the purpose of the Anti Ragging Policy: preventing and eliminating ragging. Award full marks if the answer mentions prohibition, prevention, and elimination of ragging."
   },
   {
-    "id": "q02",
-    "question": "Who can I contact if I am a victim of ragging?",
-    "category": "Anti-ragging",
-    "expected_source": ["Anti Ragging Policy V 1.0"],
-    "expected_page": [],
-    "reference_answer": "The Anti-Ragging Committee or Anti-Ragging Squad.",
-    "answerable": true
-  },
-  {
-    "id": "q03",
-    "question": "What happens if a student violates the Code of Ethical & Professional Conduct?",
-    "category": "Code of conduct",
-    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy"],
-    "expected_page": [],
-    "reference_answer": "Disciplinary action may be taken, up to and including suspension or expulsion.",
-    "answerable": true
-  },
-  {
-    "id": "q04",
-    "question": "Does the DAC policy apply to faculty or just students?",
-    "category": "DAC questions",
+    "id": "exp02",
+    "question": "What is the DAC and what is its role in the university?",
+    "category": "Explanation",
     "expected_source": ["DAC Policy- Version 02 (1)"],
-    "expected_page": [],
-    "reference_answer": "The DAC policy outlines rules primarily affecting student academics and discipline.",
-    "answerable": true
+    "reference_answer": "DAC stands for Disciplinary Action Committee. Its role is to investigate and adjudicate cases of student misconduct and impose appropriate disciplinary action.",
+    "answerable": true,
+    "judge_rubric": "The answer must explain what DAC stands for (Disciplinary Action Committee) and describe its purpose of handling student misconduct cases. Penalize if the expansion of DAC is missing."
   },
   {
-    "id": "q05",
-    "question": "What is the DAC?",
-    "category": "DAC questions",
-    "expected_source": ["DAC Policy- Version 02 (1)"],
-    "expected_page": [],
-    "reference_answer": "Disciplinary Action Committee.",
-    "answerable": true
-  },
-  {
-    "id": "q06",
-    "question": "Are students allowed to consume drugs on campus?",
-    "category": "Drug abuse policy",
+    "id": "exp03",
+    "question": "Explain the university's drug abuse policy and the consequences for students found guilty.",
+    "category": "Explanation",
     "expected_source": ["Drug Abuse Policy March 2024"],
-    "expected_page": [],
-    "reference_answer": "No, the university maintains a strict zero-tolerance policy towards drug abuse.",
-    "answerable": true
+    "reference_answer": "The university maintains a strict zero-tolerance policy towards drug abuse. Students found guilty may face severe disciplinary action including possible expulsion.",
+    "answerable": true,
+    "judge_rubric": "Award full credit if the answer explains the zero-tolerance stance and mentions disciplinary consequences. Partial credit if only one aspect is covered."
   },
   {
-    "id": "q07",
-    "question": "What is the deadline for Odd Semester fee payment for existing students?",
-    "category": "Fee questions",
+    "id": "exp04",
+    "question": "What does the Code of Ethical and Professional Conduct require from students?",
+    "category": "Explanation",
+    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy"],
+    "reference_answer": "Students must behave with integrity, respect peers and faculty, maintain academic honesty, dress decently, and adhere to university norms and regulations.",
+    "answerable": true,
+    "judge_rubric": "Full credit if the answer covers multiple pillars: integrity, academic honesty, respectful behavior. Partial credit for covering only one or two aspects."
+  },
+  {
+    "id": "exp05",
+    "question": "What is the minimum attendance requirement for students to appear in examinations?",
+    "category": "Explanation",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "Students must maintain a minimum of 75% attendance to be eligible to appear in end-semester examinations.",
+    "answerable": true,
+    "judge_rubric": "The answer must state the 75% minimum attendance requirement. Award full marks only if the percentage is correctly stated."
+  },
+  {
+    "id": "ret01",
+    "question": "Which document specifies the rules for hostel room allocation?",
+    "category": "Code Retrieval",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "The Student Handbook 2026-27 specifies the procedure and rules for hostel room allocation.",
+    "answerable": true,
+    "judge_rubric": "The answer should correctly identify the Student Handbook as the source document for hostel allocation rules. Penalize if a wrong document is cited."
+  },
+  {
+    "id": "ret02",
+    "question": "Where can I find information about the fee payment calendar for the academic year 2026-27?",
+    "category": "Code Retrieval",
     "expected_source": ["Fee Payment Calendar-Academic Year-2026-27"],
-    "expected_page": [],
-    "reference_answer": "Refer to the specific date in the fee payment calendar table for odd semesters.",
-    "answerable": true
+    "reference_answer": "The Fee Payment Calendar for Academic Year 2026-27 document contains all deadlines and payment schedules.",
+    "answerable": true,
+    "judge_rubric": "Full marks if the answer identifies the Fee Payment Calendar document as the source. Award partial credit if the answer is relevant but does not name the specific document."
   },
   {
-    "id": "q08",
-    "question": "Are there late fee penalties?",
-    "category": "Fee questions",
+    "id": "ret03",
+    "question": "Which policy document covers the university's stance on ragging?",
+    "category": "Code Retrieval",
+    "expected_source": ["Anti Ragging Policy V 1.0"],
+    "reference_answer": "The Anti Ragging Policy V 1.0 document covers the university's stance, definitions, consequences, and committees related to ragging.",
+    "answerable": true,
+    "judge_rubric": "The answer must reference the Anti Ragging Policy document. Award full credit if the document is named and described. Penalize incorrect source citations."
+  },
+  {
+    "id": "ret04",
+    "question": "Which document would I refer to for understanding the academic calendar events for 2026-27?",
+    "category": "Code Retrieval",
+    "expected_source": ["University Calendar (Academic Year 2026-27) (2)"],
+    "reference_answer": "The University Calendar for Academic Year 2026-27 lists all academic events, exam schedules, holidays, and semester start/end dates.",
+    "answerable": true,
+    "judge_rubric": "Award full marks if the answer identifies the University Calendar as the correct source. Deduct points for citing irrelevant documents."
+  },
+  {
+    "id": "ret05",
+    "question": "Who can I contact if I am a victim of ragging?",
+    "category": "Code Retrieval",
+    "expected_source": ["Anti Ragging Policy V 1.0"],
+    "reference_answer": "Victims of ragging should contact the Anti-Ragging Committee or the Anti-Ragging Squad as defined in the Anti Ragging Policy.",
+    "answerable": true,
+    "judge_rubric": "Full credit for mentioning the Anti-Ragging Committee and/or Anti-Ragging Squad. Partial credit if only one contact is mentioned."
+  },
+  {
+    "id": "dep01",
+    "question": "How do the Fee Payment Calendar and the Student Handbook relate to late fee penalties?",
+    "category": "Dependency Understanding",
     "expected_source": ["Fee Payment Calendar-Academic Year-2026-27", "Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "Yes, late payments attract penalties.",
-    "answerable": true
+    "reference_answer": "The Fee Payment Calendar specifies the due dates, while the Student Handbook outlines the penalty clauses and consequences of late payment.",
+    "answerable": true,
+    "judge_rubric": "Full credit if the answer correctly describes how both documents are related — calendar sets deadlines, handbook defines penalties. Partial credit if only one document's role is explained."
   },
   {
-    "id": "q09",
-    "question": "Is Diwali a university holiday in 2026?",
-    "category": "Holiday questions",
-    "expected_source": ["Holiday List 2026 (1) (1)"],
-    "expected_page": [],
-    "reference_answer": "Yes, Diwali is typically listed as a holiday.",
-    "answerable": true
+    "id": "dep02",
+    "question": "How does the DAC Policy interact with the Code of Ethical Conduct in handling student misconduct?",
+    "category": "Dependency Understanding",
+    "expected_source": ["DAC Policy- Version 02 (1)", "Code of Ethical & Professional Conduct- Student - Copy"],
+    "reference_answer": "The Code of Ethical Conduct defines the expected behavior standards, while the DAC Policy provides the framework for disciplinary proceedings when those standards are violated.",
+    "answerable": true,
+    "judge_rubric": "Award full marks if the answer explains the complementary relationship: one sets standards, the other enforces them. Partial credit if the relationship is vague."
   },
   {
-    "id": "q10",
-    "question": "How many total holidays are there in 2026?",
-    "category": "Table-based questions",
-    "expected_source": ["Holiday List 2026 (1) (1)"],
-    "expected_page": [],
-    "reference_answer": "Check the tabulated list of holidays for the total count.",
-    "answerable": true
-  },
-  {
-    "id": "q11",
-    "question": "What is the attendance requirement for exams?",
-    "category": "Student handbook",
-    "expected_source": ["Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "Students typically require 75% minimum attendance.",
-    "answerable": true
-  },
-  {
-    "id": "q12",
-    "question": "What is the procedure for hostel room allocation?",
-    "category": "Student handbook",
-    "expected_source": ["Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "Hostel rooms are allocated based on availability and university procedure.",
-    "answerable": true
-  },
-  {
-    "id": "q13",
-    "question": "How are mid-term exams weighted in the final grade?",
-    "category": "Student handbook",
-    "expected_source": ["Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "The weightage is defined in the examination scheme section.",
-    "answerable": true
-  },
-  {
-    "id": "q14",
-    "question": "When does the even semester begin?",
-    "category": "Calendar questions",
-    "expected_source": ["University Calendar (Academic Year 2026-27) (2)"],
-    "expected_page": [],
-    "reference_answer": "Check the start dates in the university calendar for the even semester.",
-    "answerable": true
-  },
-  {
-    "id": "q15",
-    "question": "What are the dates for the end-semester examinations?",
-    "category": "Calendar questions",
-    "expected_source": ["University Calendar (Academic Year 2026-27) (2)"],
-    "expected_page": [],
-    "reference_answer": "The specific dates are tabulated in the academic calendar.",
-    "answerable": true
-  },
-  {
-    "id": "q16",
-    "question": "What are the rules regarding mobile phone usage in classrooms?",
-    "category": "Code of conduct",
-    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy", "Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "Mobile phones should typically be kept on silent or switched off.",
-    "answerable": true
-  },
-  {
-    "id": "q17",
-    "question": "What is the dress code for students?",
-    "category": "Code of conduct",
-    "expected_source": ["Code of Ethical & Professional Conduct- Student - Copy"],
-    "expected_page": [],
-    "reference_answer": "Students are expected to dress decently and professionally.",
-    "answerable": true
-  },
-  {
-    "id": "q18",
-    "question": "What is the punishment for cheating in an exam?",
-    "category": "DAC questions",
-    "expected_source": ["DAC Policy- Version 02 (1)", "Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "It is handled by the DAC and can lead to cancellation of exams or suspension.",
-    "answerable": true
-  },
-  {
-    "id": "q19",
-    "question": "Are pets allowed in the hostel?",
-    "category": "Student handbook",
-    "expected_source": ["Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "Generally, pets are not allowed in the hostel.",
-    "answerable": true
-  },
-  {
-    "id": "q20",
-    "question": "How do I apply for a transcript?",
-    "category": "Student handbook",
-    "expected_source": ["Student Handbook 2026-27_V3"],
-    "expected_page": [],
-    "reference_answer": "Apply through the university portal or registry office.",
-    "answerable": true
-  },
-  {
-    "id": "q21",
-    "question": "What happens if I test positive for drugs?",
-    "category": "Drug abuse policy",
-    "expected_source": ["Drug Abuse Policy March 2024"],
-    "expected_page": [],
-    "reference_answer": "Strict disciplinary action, including possible expulsion.",
-    "answerable": true
-  },
-  {
-    "id": "q22",
-    "question": "Who is the President of the United States?",
-    "category": "Negative/out-of-scope",
-    "expected_source": [],
-    "expected_page": [],
-    "reference_answer": "I couldn't find enough information in the BMU knowledge base to answer that reliably.",
-    "answerable": false
-  },
-  {
-    "id": "q23",
-    "question": "What is the recipe for chocolate cake?",
-    "category": "Negative/out-of-scope",
-    "expected_source": [],
-    "expected_page": [],
-    "reference_answer": "I couldn't find enough information in the BMU knowledge base to answer that reliably.",
-    "answerable": false
-  },
-  {
-    "id": "q24",
-    "question": "What are the rules regarding parking on campus and the fees associated with it?",
-    "category": "Multi-document",
-    "expected_source": ["Student Handbook 2026-27_V3", "Fee Payment Calendar-Academic Year-2026-27"],
-    "expected_page": [],
-    "reference_answer": "Parking rules are in the handbook; fees (if any) are in the fee structure.",
-    "answerable": true
-  },
-  {
-    "id": "q25",
-    "question": "How are holidays and academic events scheduled together in 2026?",
-    "category": "Multi-document",
+    "id": "dep03",
+    "question": "How do the Holiday List and the University Calendar together affect academic scheduling?",
+    "category": "Dependency Understanding",
     "expected_source": ["Holiday List 2026 (1) (1)", "University Calendar (Academic Year 2026-27) (2)"],
-    "expected_page": [],
-    "reference_answer": "Holidays are integrated into the academic calendar.",
-    "answerable": true
+    "reference_answer": "The Holiday List defines non-working days, which are integrated into the University Calendar to plan academic activities, exams, and events around those dates.",
+    "answerable": true,
+    "judge_rubric": "Full credit for explaining that holidays from the Holiday List are factored into the academic schedule in the University Calendar. Partial credit for mentioning both documents without explaining the dependency."
+  },
+  {
+    "id": "dep04",
+    "question": "Which documents together govern student attendance and examination eligibility?",
+    "category": "Dependency Understanding",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "The Student Handbook governs attendance requirements (minimum 75%) and links this to examination eligibility under the academic regulations section.",
+    "answerable": true,
+    "judge_rubric": "Award marks for identifying the Student Handbook as the governing document and mentioning the 75% attendance rule linked to exam eligibility."
+  },
+  {
+    "id": "dep05",
+    "question": "How does the Anti-Ragging Policy relate to the Drug Abuse Policy in terms of campus safety?",
+    "category": "Dependency Understanding",
+    "expected_source": ["Anti Ragging Policy V 1.0", "Drug Abuse Policy March 2024"],
+    "reference_answer": "Both policies contribute to campus safety — the Anti-Ragging Policy addresses peer harassment and intimidation, while the Drug Abuse Policy addresses substance-related misconduct. Together they form a comprehensive campus safety framework.",
+    "answerable": true,
+    "judge_rubric": "Full marks if the answer explains how both policies serve campus safety from different angles. Partial if only one policy's contribution is explained."
+  },
+  {
+    "id": "bug01",
+    "question": "Are pets allowed in the hostel? What happens if a student is found with a pet?",
+    "category": "Bug Analysis",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "Generally, pets are not allowed in the hostel. Students found with pets may be subject to disciplinary action as per hostel rules.",
+    "answerable": true,
+    "judge_rubric": "Full credit for stating pets are not allowed AND mentioning consequences. Penalize if the answer only states one part or contradicts this with incorrect information."
+  },
+  {
+    "id": "bug02",
+    "question": "What is the punishment for cheating in an exam — is it the same for all types of cheating?",
+    "category": "Bug Analysis",
+    "expected_source": ["DAC Policy- Version 02 (1)", "Student Handbook 2026-27_V3"],
+    "reference_answer": "Cheating in exams is handled by the DAC and consequences include cancellation of exams or suspension. The severity may vary based on the nature of the misconduct.",
+    "answerable": true,
+    "judge_rubric": "Full marks for mentioning DAC involvement and variable consequences. Penalize if the answer oversimplifies (e.g., 'all cheating has the same punishment') without contextual nuance."
+  },
+  {
+    "id": "bug03",
+    "question": "A student claims they were falsely accused of ragging. What recourse do they have?",
+    "category": "Bug Analysis",
+    "expected_source": ["Anti Ragging Policy V 1.0"],
+    "reference_answer": "A falsely accused student can appeal to the Anti-Ragging Committee, which will investigate the matter. The committee must give the accused a fair hearing before concluding.",
+    "answerable": true,
+    "judge_rubric": "Award full marks if the answer mentions the committee-based appeals/investigation process and fair hearing. Partial credit for vague appeals without specifying the committee."
+  },
+  {
+    "id": "bug04",
+    "question": "What if a student tests positive for drugs but claims it was accidental (e.g., passive exposure)?",
+    "category": "Bug Analysis",
+    "expected_source": ["Drug Abuse Policy March 2024"],
+    "reference_answer": "The drug abuse policy maintains a zero-tolerance stance. The case would be reviewed by the disciplinary authority, but the zero-tolerance policy applies strictly.",
+    "answerable": true,
+    "judge_rubric": "Full marks for stating the zero-tolerance policy applies regardless of circumstance and that it goes through disciplinary review. Penalize if the answer dismisses the policy without acknowledging the strict stance."
+  },
+  {
+    "id": "bug05",
+    "question": "What happens if the DAC cannot reach a decision in a misconduct case?",
+    "category": "Bug Analysis",
+    "expected_source": ["DAC Policy- Version 02 (1)"],
+    "reference_answer": "The DAC Policy should outline escalation procedures. In cases of deadlock or unresolved matters, the case may be escalated to higher university authorities.",
+    "answerable": true,
+    "judge_rubric": "Award marks for any mention of escalation or review procedures. Accept reasonable inference from the DAC policy context even if not stated verbatim."
+  },
+  {
+    "id": "gen01",
+    "question": "List all the public holidays in 2026 according to the university holiday list.",
+    "category": "Code Generation",
+    "expected_source": ["Holiday List 2026 (1) (1)"],
+    "reference_answer": "The holidays are listed in the Holiday List 2026 document and include national and religious holidays such as Republic Day, Holi, Eid, Independence Day, Diwali, Christmas, etc.",
+    "answerable": true,
+    "judge_rubric": "Full marks if the answer provides a structured list or mentions several specific holidays by name. Partial credit for a vague description without specific holidays."
+  },
+  {
+    "id": "gen02",
+    "question": "Produce a summary table comparing the key deadlines in the Fee Payment Calendar for odd and even semesters.",
+    "category": "Code Generation",
+    "expected_source": ["Fee Payment Calendar-Academic Year-2026-27"],
+    "reference_answer": "The Fee Payment Calendar has separate rows for odd semester (typically July-December) and even semester (January-June) with specific payment deadlines and penalty dates.",
+    "answerable": true,
+    "judge_rubric": "Award full marks if the answer produces a structured summary/table with odd vs even semester columns and mentions deadlines. Partial credit for narrative without structure."
+  },
+  {
+    "id": "gen03",
+    "question": "What are the key dates in the academic calendar for the 2026-27 year?",
+    "category": "Code Generation",
+    "expected_source": ["University Calendar (Academic Year 2026-27) (2)"],
+    "reference_answer": "The academic calendar includes semester start/end dates, mid-term and end-semester exam dates, holidays, and special academic events for both odd and even semesters.",
+    "answerable": true,
+    "judge_rubric": "Full marks for a structured list of key dates. Partial credit for mentioning the calendar exists without providing specific structured information."
+  },
+  {
+    "id": "gen04",
+    "question": "Summarize the university's attendance policy in bullet points.",
+    "category": "Code Generation",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "Key attendance policy points: (1) Minimum 75% attendance required, (2) Below 75% means ineligibility for exams, (3) Medical exemptions may be granted with documentation, (4) Faculty record attendance for each session.",
+    "answerable": true,
+    "judge_rubric": "Full marks for structured bullet points covering the 75% rule and exam eligibility. Partial credit for narrative answers without clear structure."
+  },
+  {
+    "id": "gen05",
+    "question": "Generate a checklist of documents a new student must be aware of at BMU University.",
+    "category": "Code Generation",
+    "expected_source": ["Student Handbook 2026-27_V3", "Anti Ragging Policy V 1.0", "Code of Ethical & Professional Conduct- Student - Copy"],
+    "reference_answer": "New students should be aware of: Student Handbook, Anti Ragging Policy, Code of Ethical Conduct, Fee Payment Calendar, University Calendar, Drug Abuse Policy, and DAC Policy.",
+    "answerable": true,
+    "judge_rubric": "Award full marks if the answer generates a structured checklist with multiple relevant policy documents. Partial credit for listing fewer than 4 documents."
+  },
+  {
+    "id": "ref01",
+    "question": "Can you provide a more concise version of the Anti-Ragging Policy's key rules?",
+    "category": "Refactoring",
+    "expected_source": ["Anti Ragging Policy V 1.0"],
+    "reference_answer": "Key rules: (1) Ragging in any form is strictly prohibited, (2) Victims must report to Anti-Ragging Committee, (3) Perpetrators face disciplinary action up to expulsion, (4) All students must sign an anti-ragging undertaking.",
+    "answerable": true,
+    "judge_rubric": "Full marks for producing a clear, concise, restructured version of the policy. Penalize if the answer is simply copied verbatim or if key rules are missing."
+  },
+  {
+    "id": "ref02",
+    "question": "Rewrite the attendance policy section in simpler language for first-year students.",
+    "category": "Refactoring",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "You need to attend at least 75 out of every 100 classes. If you attend less, you won't be allowed to sit for your final exams. Always inform the college if you're absent due to illness.",
+    "answerable": true,
+    "judge_rubric": "Full marks for simplified, student-friendly language that still conveys the 75% rule and exam consequence. Penalize for overly technical or copied language."
+  },
+  {
+    "id": "ref03",
+    "question": "Summarize the DAC policy in plain language, removing legal jargon.",
+    "category": "Refactoring",
+    "expected_source": ["DAC Policy- Version 02 (1)"],
+    "reference_answer": "The DAC is a committee that looks into serious rule violations by students. They investigate, give the student a chance to explain, and then decide on a suitable punishment if found guilty.",
+    "answerable": true,
+    "judge_rubric": "Full marks for a plain-language summary with key steps (investigation, hearing, decision). Penalize for retaining excessive legal jargon or omitting key procedural steps."
+  },
+  {
+    "id": "ref04",
+    "question": "Rephrase the drug abuse policy's zero-tolerance clause in a way that is easier for students to understand.",
+    "category": "Refactoring",
+    "expected_source": ["Drug Abuse Policy March 2024"],
+    "reference_answer": "Simply put: if you are caught with drugs or found under their influence on campus, you will face serious consequences, possibly being expelled from the university — no exceptions.",
+    "answerable": true,
+    "judge_rubric": "Full marks for a clear, student-friendly rephrasing of the zero-tolerance clause. Must convey the strictness without softening the policy."
+  },
+  {
+    "id": "ref05",
+    "question": "Convert the key hostel rules from the Student Handbook into a quick-reference FAQ format.",
+    "category": "Refactoring",
+    "expected_source": ["Student Handbook 2026-27_V3"],
+    "reference_answer": "FAQ: Q: Are pets allowed? A: No. Q: What are visiting hours? A: As per hostel schedule. Q: How is the room allocated? A: Based on availability and procedure. Q: Can I cook in my room? A: Generally not allowed.",
+    "answerable": true,
+    "judge_rubric": "Full marks for producing a FAQ-style format with at least 3 Q&A pairs about hostel rules. Partial credit for less structured but relevant answers."
+  },
+  {
+    "id": "rag01",
+    "question": "How are holidays and academic events scheduled together in the 2026 academic year?",
+    "category": "RAG based Question",
+    "expected_source": ["Holiday List 2026 (1) (1)", "University Calendar (Academic Year 2026-27) (2)"],
+    "reference_answer": "Holidays from the Holiday List are integrated into the University Calendar, ensuring that academic activities, exams, and events are planned around public and university holidays.",
+    "answerable": true,
+    "judge_rubric": "Full marks for explaining the integration of both documents. Must mention how holiday scheduling avoids conflict with academic events."
+  },
+  {
+    "id": "rag02",
+    "question": "What are the combined rules regarding parking on campus and the fees associated with it?",
+    "category": "RAG based Question",
+    "expected_source": ["Student Handbook 2026-27_V3", "Fee Payment Calendar-Academic Year-2026-27"],
+    "reference_answer": "Parking rules are specified in the Student Handbook, while any associated fees would appear in the Fee Payment Calendar or fee structure documentation.",
+    "answerable": true,
+    "judge_rubric": "Award marks for correctly attributing parking rules to the handbook and fees to the fee calendar. Partial credit for only addressing one aspect."
+  },
+  {
+    "id": "rag03",
+    "question": "Which BMU policies would a student need to know about to understand their rights and responsibilities on campus?",
+    "category": "RAG based Question",
+    "expected_source": ["Anti Ragging Policy V 1.0", "Code of Ethical & Professional Conduct- Student - Copy", "Student Handbook 2026-27_V3", "DAC Policy- Version 02 (1)"],
+    "reference_answer": "Students should know: the Student Handbook (overall rules), Anti Ragging Policy (rights as a victim), Code of Ethical Conduct (responsibilities), and the DAC Policy (consequences of misconduct).",
+    "answerable": true,
+    "judge_rubric": "Full marks for synthesizing information from multiple documents into a comprehensive answer about rights and responsibilities. Partial credit for only mentioning 1-2 documents."
+  },
+  {
+    "id": "rag04",
+    "question": "Is Diwali a university holiday in 2026, and does the academic calendar have any scheduled exams near that date?",
+    "category": "RAG based Question",
+    "expected_source": ["Holiday List 2026 (1) (1)", "University Calendar (Academic Year 2026-27) (2)"],
+    "reference_answer": "Diwali is typically a university holiday per the holiday list. The academic calendar should be checked to confirm whether exams are scheduled close to that date.",
+    "answerable": true,
+    "judge_rubric": "Full marks for confirming Diwali as a holiday AND cross-referencing the academic calendar for exams. Partial credit if only one aspect is addressed."
+  },
+  {
+    "id": "rag05",
+    "question": "Who is the President of the United States?",
+    "category": "RAG based Question",
+    "expected_source": [],
+    "reference_answer": "I couldn't find enough information in the BMU knowledge base to answer that reliably.",
+    "answerable": false,
+    "judge_rubric": "Full marks ONLY if the model correctly refuses to answer and states it cannot find relevant information in the BMU knowledge base. Penalize any hallucinated political answer."
   }
 ]

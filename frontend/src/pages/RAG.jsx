@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { chatWithRAG, embedQuery, retrieveChunks } from '../services/api';
-import { Search, Loader2, ArrowDown, Database, Cpu, FileText } from 'lucide-react';
+import { Search, Loader2, ArrowDown, Database, Cpu, FileText, ShieldCheck, ShieldX, AlertTriangle } from 'lucide-react';
 
 const RAG = () => {
   const [query, setQuery] = useState('What is the deadline for Odd Semester fee payment for existing students?');
@@ -11,6 +11,7 @@ const RAG = () => {
   const [retrievedChunks, setRetrievedChunks] = useState([]);
   const [finalResult, setFinalResult] = useState(null);
   const [error, setError] = useState(null);
+  const [guardrailResult, setGuardrailResult] = useState(null);
 
   const handleRun = async (e) => {
     e.preventDefault();
@@ -22,6 +23,7 @@ const RAG = () => {
     setRetrievedChunks([]);
     setFinalResult(null);
     setError(null);
+    setGuardrailResult(null);
     
     try {
       // Step 2: Query Embedding
@@ -36,9 +38,10 @@ const RAG = () => {
       
       setPipelineState('generating');
       
-      // Step 4-7: LLM & Final Output (We use the main chat endpoint which does retrieval again, but it's fine for demo consistency)
+      // Step 4-7: LLM & Final Output
       const chatData = await chatWithRAG(query, true);
       setFinalResult(chatData);
+      if (chatData.guardrail) setGuardrailResult(chatData.guardrail);
       
       setPipelineState('complete');
     } catch (err) {
@@ -114,6 +117,38 @@ const RAG = () => {
       </form>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        
+        {/* Step 00: Input Guardrail Status */}
+        {pipelineState !== 'idle' && guardrailResult && (
+          <div style={{
+            padding: '0.85rem 1.25rem',
+            borderRadius: '8px',
+            background: guardrailResult.passed ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.1)',
+            border: `1px solid ${guardrailResult.passed ? 'rgba(34,197,94,0.3)' : 'rgba(239,68,68,0.4)'}`,
+            display: 'flex', alignItems: 'center', gap: '0.75rem'
+          }}>
+            {guardrailResult.passed
+              ? <ShieldCheck size={20} color="#22c55e" />
+              : <ShieldX size={20} color="#ef4444" />}
+            <div style={{ flex: 1 }}>
+              <span style={{ fontWeight: 700, fontSize: '0.85rem', color: guardrailResult.passed ? '#22c55e' : '#ef4444' }}>
+                {guardrailResult.passed ? '✅ Input Guardrail: PASSED' : `🚫 Input Guardrail: BLOCKED by ${guardrailResult.blocked_by}`}
+              </span>
+              {!guardrailResult.passed && (
+                <p style={{ margin: '0.25rem 0 0', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{guardrailResult.reason}</p>
+              )}
+              {guardrailResult.warnings?.length > 0 && (
+                <div style={{ marginTop: '0.35rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  {guardrailResult.warnings.map((w, i) => (
+                    <span key={i} style={{ fontSize: '0.72rem', background: 'rgba(245,158,11,0.15)', color: '#f59e0b', padding: '0.2rem 0.6rem', borderRadius: '4px' }}>
+                      ⚠ {w.guard}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
         
         <StepBox 
           number="01" 
@@ -271,6 +306,39 @@ const RAG = () => {
             </div>
           )}
         </StepBox>
+
+        {/* Step 09: Output Validation */}
+        {pipelineState === 'complete' && guardrailResult && (
+          <div className="card" style={{ borderColor: guardrailResult.warnings?.length > 0 ? '#f59e0b33' : 'var(--border-color)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+              <div style={{ width: '24px', height: '24px', borderRadius: '12px', background: 'var(--text-primary)', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 'bold' }}>09</div>
+              <h3 style={{ margin: 0, fontSize: '1rem' }}>OUTPUT VALIDATION</h3>
+            </div>
+            <div style={{ paddingLeft: '2.25rem' }}>
+              {guardrailResult.warnings?.length > 0 ? (
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#f59e0b', marginBottom: '0.75rem', fontWeight: 600, fontSize: '0.9rem' }}>
+                    <AlertTriangle size={16} />
+                    {guardrailResult.warnings.length} output warning{guardrailResult.warnings.length > 1 ? 's' : ''} detected
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    {guardrailResult.warnings.map((w, i) => (
+                      <div key={i} style={{ padding: '0.6rem 0.85rem', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.25)', borderRadius: '6px', fontSize: '0.82rem' }}>
+                        <span style={{ color: '#f59e0b', fontWeight: 600 }}>{w.guard}:</span>&nbsp;
+                        <span style={{ color: 'var(--text-secondary)' }}>{w.reason}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#22c55e', fontSize: '0.9rem' }}>
+                  <ShieldCheck size={16} />
+                  All output checks passed — response is grounded and well-formed.
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

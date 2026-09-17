@@ -21,12 +21,32 @@ CHROMA_COLLECTION_NAME = "bmu_documents"
 CODEBASE_CHROMA_COLLECTION_NAME = "bmu_codebase"
 INDEXING_BATCH_SIZE = 64
 MAX_EMBEDDING_CHUNK_CHARS = 1500    # If chunk is larger, we apply secondary split
+EMBEDDING_BATCH_SIZE = 32           # SentenceTransformer encode batch size (keep ≤64 to avoid OOM)
+
+# ─── Codebase Indexer Settings ────────────────────────────────────────────────
+CODEBASE_CHUNK_LINES = 50           # Lines per code chunk
+CODEBASE_CHUNK_OVERLAP_LINES = 10   # Overlap between consecutive code chunks
 
 # ─── RAG Generation & LLM Settings ────────────────────────────────────────────
 MODEL_CONFIGS = {
-    "codellama:7b-instruct": {"display_name": "Code Llama 7B", "description": "Llama 2 based coding model"},
-    "starcoder2:3b": {"display_name": "StarCoder2 3B", "description": "3B parameter base model from BigCode"},
-    "qwen2.5-coder:1.5b": {"display_name": "Qwen 2.5 Coder 1.5B", "description": "Highly capable 1.5B coder from Qwen"}
+    # oom_safe=False: requires 4-6 GB RAM; will OOM-kill on low-memory systems
+    "codellama:7b-instruct": {
+        "display_name": "Code Llama 7B",
+        "description": "Llama 2 based coding model",
+        "oom_safe": False,
+    },
+    # oom_safe=True: ~1.9 GB RAM, safe on most systems
+    "starcoder2:3b": {
+        "display_name": "StarCoder2 3B",
+        "description": "3B parameter base model from BigCode",
+        "oom_safe": True,
+    },
+    # oom_safe=True: ~1 GB RAM, fastest on CPU, preferred default
+    "qwen2.5-coder:1.5b": {
+        "display_name": "Qwen 2.5 Coder 1.5B",
+        "description": "Highly capable 1.5B coder from Qwen",
+        "oom_safe": True,
+    },
 }
 # DEFAULT: qwen2.5-coder:1.5b — only ~1GB RAM, fast on CPU, no OOM risk
 # codellama:7b-instruct requires 4-6GB RAM and will OOM-kill on low-memory systems
@@ -34,6 +54,12 @@ LLM_MODEL = os.getenv("LLM_MODEL", "qwen2.5-coder:1.5b")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 LLM_TIMEOUT = int(os.getenv("LLM_TIMEOUT", "120"))  # 120s is enough for 1.5B model
 RAG_TOP_K = int(os.getenv("RAG_TOP_K", "5"))
+
+# ─── LLM-as-Judge Settings ────────────────────────────────────────────────────
+# Judge model: uses qwen2.5-coder:1.5b (same as lightest eval model) — lightweight
+# and already installed. For a stricter separation use a different judge model.
+JUDGE_MODEL = os.getenv("JUDGE_MODEL", "qwen2.5-coder:1.5b")
+JUDGE_TIMEOUT = int(os.getenv("JUDGE_TIMEOUT", "90"))  # Judge calls are shorter
 MAX_CONTEXT_CHARS = 10000           # Rough context limit before truncation
 
 

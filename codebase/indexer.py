@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 from typing import List, Dict, Any
 
-from config import BASE_DIR, INDEXING_BATCH_SIZE
+from config import BASE_DIR, INDEXING_BATCH_SIZE, CODEBASE_CHUNK_LINES, CODEBASE_CHUNK_OVERLAP_LINES
 from vectorstore.chroma_store import ChromaStore
 from embeddings.embedder import generate_embeddings
 
@@ -62,9 +62,8 @@ class CodebaseIndexer:
         lines = content.split('\n')
         chunks = []
         
-        # Simple line-based chunking for all code files
-        chunk_size = 50
-        overlap = 10
+        chunk_size = CODEBASE_CHUNK_LINES
+        overlap = CODEBASE_CHUNK_OVERLAP_LINES
         
         i = 0
         chunk_idx = 0

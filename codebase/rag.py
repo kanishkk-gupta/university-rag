@@ -10,10 +10,10 @@ logger = logging.getLogger(__name__)
 CODEBASE_SYSTEM_PROMPT = """You are an expert software engineer assistant. You help the user understand a software repository.
 Use the provided codebase snippets to answer the user's question accurately.
 Always cite the file path and line numbers when referencing code.
-If the answer is not in the provided code snippets, say "I cannot determine this from the provided codebase."
+If the answer is not in the provided code snippets, say \"I cannot determine this from the provided codebase.\"
 
 Codebase Snippets:
-{context}
+{{context}}
 """
 
 class CodebaseRAGPipeline:
@@ -68,7 +68,7 @@ class CodebaseRAGPipeline:
             }
             
         # 3. Generate Answer
-        system_prompt = CODEBASE_SYSTEM_PROMPT.replace("{context}", context_str)
+        system_prompt = CODEBASE_SYSTEM_PROMPT.format(context=context_str)
         try:
             answer = self.generator.generate(system_prompt, user_query, model_name=model_name)
         except ConnectionError as e:
